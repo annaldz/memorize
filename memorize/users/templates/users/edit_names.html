@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>Change Personal Data - Memorize</title>{% endblock %}
+
+{% block content %}
+	{% load staticfiles %}				
+ <div id="myCarousel" class="carousel slide" style="background-image: url({% static 'main/images/old.jpg' %})" data-ride="carousel">
+
+					<div class="container" id="sign-in-window">
+{% if user.is_authenticated %}
+      <div class="row">
+ <div class="col-lg-4">
+       				<h2  class="form-signin-headin"  style="margin-top: 80px; color:#e6e6e6; font-weight:bold; padding-bottom:5px"></h2>
+ {% if facebook == "f" %}
+       	<li class="btn btn-default btn-md"><a href="{% url 'change' %}" style="color:#595959">Change password</a></li>
+       {% elif facebook == "t" %}
+       <p class="btn btn-primary btn-md" ><span class="glyphicon glyphicon-user"></span> Facebook User</p>
+       {% endif %} 
+	 <p style="padding-right:10px"></p>
+        <li class="btn btn-default btn-md"><a href="{% url 'profile' %}" style="color:#595959">Adjust Your Profile</a></li>
+        <p style="padding-right:10px"></p>
+        <li class="btn btn-default btn-md"><a href="{% url 'send_pic' picture=True %}" style="color:#595959">Upload New Photo</a></li>
+       
+</div><div class="col-lg-4">
+
+                               				<h2  class="form-signin-headin"  style="margin-top: 80px; color:#e6e6e6; font-weight:bold; padding-bottom:5px"> Change personal data</h2>
+	
+						
+						<form class="form-signin" name="change-data-form" id="change-data-form" method="post" action="/users/edit_names/" enctype="multipart/form-data">
+            				{% csrf_token %}
+							{% for field in form %}
+							<div class="form-field">
+								{{ field.label_tag }}
+								{{ field }}
+
+								{% if field.help_text %}
+							<p style="padding-top:10px"></p>
+								<div class="alert alert-warning">
+									<p>{{ field.help_text|safe }}</p>
+								</div> {% endif %}
+								{% if field.errors %}
+                                                             
+								<div class="alert alert-danger">
+									{% for error in field.errors %}
+									<p>{{ error }}</p>
+									{% endfor %}
+								
+                     						</div>			
+								{% endif %}
+							</div>
+							{% endfor %}
+							<div class="form-field" style="text-align:center; padding-top:5px">
+								<input class="btn btn-default btn-md" type="submit" value="Update!" class="button button-green">
+							</div>
+        				</form>
+					</div>
+					
+					{% endif %}
+				</div>
+{% endblock %}

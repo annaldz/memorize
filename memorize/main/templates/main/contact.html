@@ -1,0 +1,23 @@
+
+{% extends 'main/base.html' %}
+{% block title %}<title>Contact</title> {% endblock %}
+
+{% block content %}
+{% load staticfiles %}	
+<div id="myCarousel" class="carousel slide" style="background-image: url({% static 'main/images/old-letters.jpg' %})" data-ride="carousel">
+
+<div class="row">
+ <div class="col-lg-4">
+</div>
+<div class="col-lg-4">
+<h2  class="form-signin-headin"  style="margin-top: 90px; color:#e6e6e6; font-weight:bold; padding-bottom:5px"> Contact Form</h2>
+<form role="form" action="" method="post" style ="coulor:#000000">
+    {% csrf_token %}
+    {{ form.as_p }}
+<div class="form-field" style="text-align:center; padding-top:10px;padding-bottom:10px">
+    <button type="submit">Submit</button>
+</div>
+</form>
+</div>
+</div>
+{% endblock %}

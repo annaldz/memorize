@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+  
+    {% block title %}{% endblock %}
+    
+
+    <!-- Bootstrap core CSS -->
+   {% load staticfiles %}
+    
+   <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
+   <link href="{% static 'main/css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+   <link href="{% static 'main/css/carousel.css' %}" rel="stylesheet">
+   <link href="{% static 'main/fonts/glyphicons-halflings-regular.eot' %}">
+   <link href="{% static 'main/fonts/glyphicons-halflings-regular.svg' %}">
+   <link href="{% static 'main/fonts/glyphicons-halflings-regular.ttf' %}">
+   <link href="{% static 'main/fonts/glyphicons-halflings-regular.woff' %}">
+   <link href="{% static 'main/fonts/glyphicons-halflings-regular.woff2' %}">
+   <script type="text/javascript" language="JavaScript" src="{% static 'main/scripts/ie-emulation-modes-warning.js' %}"></script>
+   <script type="text/javascript" language="JavaScript" src="{% static 'main/scripts/repeat.js' %}"></script>
+   <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+
+   
+
+    
+    
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body style="background-color:#e6e6e6">
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">Memorize</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                <li class="active"><a href="{% url 'profile' %}" title="My profile"><span class="glyphicon glyphicon-user"></span> {{ user.get_short_name }}</a></li>
+                <li><a href="{% url 'file_browser' %}" title="My files">My Files</a></li>
+                <li><a href="{% url 'list' %}" title="Lists">Lists</a></li>
+                 <li><a href="{% url 'contact' %}" title="Contact">Contact</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'edit-names' %}">Change Personal Data</a></li>
+                    <li><a href="{% url 'profile' %}">Ajust Profile</a></li>
+                    <li><a href="{% url 'add_list' %}">Add New List</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li class="dropdown-header">Files</li>
+                    <li><a href="{% url 'send_file' %}">Upload File</a></li>
+                    <li><a href="{% url 'new_dir' %}">Create New Directory</a></li>
+                  </ul>
+                </li> 
+               {% else %}
+                <li class="active"><a href="{% url 'register' %}" title="Get started">Get started</a></li>
+                <li><a href="{% url 'contact' %}" title="Contact">Contact</a></li>
+               {% endif %}
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li class="active"><a href="{% url 'logout' %}" title="Sign in">Log out <span class="sr-only"></span></a></li>
+                {% else %}
+                <li><a href="{% url 'register' %}" title="Sign up">Sign up <span class="sr-only"></span></a></li>
+                <li class="active"><a href="{% url 'login' %}" title="Sign in">Sign in <span class="sr-only"></span></a></li>
+                {% endif %}
+                
+             </ul>
+            </div>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+
+
+
+
+
+   
+{% block content %}
+{% endblock %}
+
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+    
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% load staticfiles %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="{% static 'main/scripts/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/scripts/holder.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'main/scripts/ie10-viewport-bug-workaround.js'"></script>
+  </body>
+</html>

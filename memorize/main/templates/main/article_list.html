@@ -1,0 +1,108 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>Welcome to Memorize!</title>{% endblock %}
+
+{% block content %}	
+				    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+{% load staticfiles %}
+          <img class="first-slide" src="{% static 'main/images/books.jpg' %}" alt="First slide">
+          
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Study smart not hard!</h1>
+              <p>Our flashcard system gives you opportunity to learn quicker than ever before. Now it is free! </p>
+              <p><a class="btn btn-lg btn-default" href="{% url 'register' %}" role="button">Sign up today</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+{% load staticfiles %}
+          <img class="second-slide" src="{% static 'main/images/document.jpg' %}" alt="Second slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1 style="color:#262626">Keep your learning materials in one place!</h1>
+              <p style="color:#262626">Now you can upload your pdf, audio, video etc here!</p>
+              <p><a class="btn btn-lg btn-default" href="#" role="button">Learn more</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+{% load staticfiles %}
+          <img class="third-slide" src="{% static 'main/images/flashcards.jpg' %}" alt="Third slide">
+          
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Smart flashcard system</h1>
+              <p>Revision has never been so easy!</p>
+              <p><a class="btn btn-lg btn-default" href="{% url 'register' %}" role="button">Try now</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div><!-- /.carousel -->
+ <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+      <!-- Three columns of text below the carousel -->
+      <div class="row">
+{% for article in articles|slice:":3" %}
+        <div class="col-lg-4">
+{% load staticfiles %}
+{% static "" as baseURL %}
+          <img class="img-circle" src="{{ baseURL }}/main/images/{{ article.image }}" alt="Generic placeholder image" width="140" height="140">
+          <h2>{{ article.title }}</h2>
+          <p>{{ article.text|linebreaksbr|truncatewords:30 }}</p>
+          <p><a class="btn btn-default" href="{% url 'article_detail' pk=article.pk %}" role="button">View details &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+{% endfor %}        
+      </div><!-- /.row -->
+
+
+      <!-- START THE FEATURETTES -->
+{% for article in articles %}
+{% if forloop.counter > 3 %}
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading"><a href="{% url 'article_detail' pk=article.pk %}">{{ article.title }}</a></h2>
+          <p class="lead">{{ article.text|linebreaksbr|truncatewords:40 }}</p>
+        </div>
+        <div class="col-md-5">
+{% load staticfiles %}
+{% static "" as baseURL %}
+          <img class="featurette-image img-responsive center-block" style="padding-top:100px" src="{{ baseURL }}/main/images/{{ article.image }}" alt="Generic placeholder image">
+        </div>
+      </div>
+{% endif %}
+{% endfor %}
+
+     
+
+<div>
+{% load static %}
+{% comment %}<img src="{% static 'main/storage/a2c8d209c4e0896' %}">
+{% endcomment %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>{{ article.title }}</title>{% endblock %}
+
+{% block content %}	
+ <div class="container">
+
+<h2  class="form-signin-headin"  style="margin-top: 110px; color:#404040; font-weight:bold;"> {{ article.title }}</h2>
+        {% if article.published_date %}
+            <div class="date">
+                {{ article.published_date }}
+<h2  class="form-signin-headin"  style="padding-top: 3px; color:#404040; font-weight:bold;"></h2>
+            </div>
+        {% endif %}
+{% load staticfiles %}
+{% static "" as baseURL %}
+          <img class="img-responsive" src="{{ baseURL }}/main/images/{{ article.image }}" alt="Generic placeholder image">
+<h2  class="form-signin-headin"  style="padding-top: 3px; color:#404040; font-weight:bold;"></h2>
+        <p class="lead">{{ article.text|linebreaksbr }}</p>
+    </div>
+{% endblock %}

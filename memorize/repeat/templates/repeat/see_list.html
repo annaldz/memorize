@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>{{ list_object.name }} - Memorize</title>{% endblock %}
+
+{% block content %}
+
+<h1 class="form-signin-headin"  style="margin-top: 120px; color:#404040; font-weight:bold; padding-bottom:5px; padding-left:20px">{{ list_object.name }} <a href="{% url 'add_flashcard' pk=list_object.pk %}"class="btn btn-default btn-xs"style="color:#006600"><span class="glyphicon glyphicon-plus-sign"style="text-align:center"></span></a><a href="{% url 'limit' pk=list_object.pk %}"class="btn btn-default btn-xs"><span class="glyphicon glyphicon-cog"style="text-align:center"></span></a></h1>
+{% for message in messages %}
+						<div class="alert alert-{{ message.tags }}">
+							<p>{{ message }}</p></div>
+{% endfor %}
+<table class="table" >
+				<thead>
+                                <tr>
+                                <th></th>
+                                <th>Flashcard question</th>
+                                <th>Flashcard answer</th>
+                                <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+{% for flashcard in flashcards %}
+                                <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ flashcard.question }}</td>
+                                <td>{{ flashcard.answer }}</td>
+                                <td><a href="{% url 'remove_flashcard' pk=flashcard.pk %}"class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"style="text-align:center"></span></a></td>
+{% endfor %}                                
+                                </tr>
+                                </tbody>
+                                </table>	
+ <div class="post">
+
+
+       
+{% endblock %}

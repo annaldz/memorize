@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	<title>E-mail Sent - Reset Password - Memorize</title>
+{% endblock %}
+
+{% block content %}
+	
+
+	{% load staticfiles %}				
+ <div id="myCarousel" class="carousel slide" style="background-image: url({% static 'main/images/old.jpg' %})" data-ride="carousel">
+
+					<div class="container" id="sign-in-window">
+
+  
+
+                               				<p  class="alert alert-info"  style="margin-top: 80px;">{% if user.is_authenticated %} You should not be here.{% else %}The password reset e-mail has been sent. Check your inbox. </p>
+		</div>
+
+{% endif %}
+{% endblock %}

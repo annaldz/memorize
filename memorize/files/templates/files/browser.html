@@ -1,0 +1,310 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>{% if user.registered or user.is_authenticated %}{{ dir_now.full_path }} - My Learning Materials{% else %}Access Restricted{% endif %} - Memorize</title>{% endblock %}
+
+{% block content %}	
+
+
+
+{% load staticfiles %}				
+ 
+
+					<div class="container" id="sign-in-window">
+{% if user.is_authenticated %}
+
+       
+<div style="margin-top: 100px">
+{% if dir_now.parent_id %} {% if is_share_dir == 'False' %}<a href="{% url 'change_dir' dir_now.parent_id.hash %}" {% else %} <a href={% url 'see_share_dir' in_dir_hash=dir_now.parent_id.hash is_share=True %} {% endif %} class="btn btn-default btn-xs"style="color:#009900;"><span class="glyphicon glyphicon-arrow-left" style="text-align:center"></span></a>{% endif %}
+
+ <h1  class="form-signin-headin"  style=" color:#404040; font-weight:bold; text-align:center; padding-bottom: 30px"> {{ dir_now.full_path }} {% if is_share_dir == 'False' %}<div class="btn-group">
+  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="{% url 'new_dir' %}">Create new directory</a></li>
+    <li><a href="{% url 'send_file' %}">Upload file</a></li>
+  </ul>
+</div>{% endif %} </h1>
+</div>
+{% if messages %}
+						{% for message in messages %}
+						<div class="alert alert-{{ message.tags }}">
+							<p>{{ message }}</p>
+						</div>
+						{% endfor %}
+						{% endif %}
+{% if dir_list or file_list or dir_now.parent_id %}  
+{% if is_share_dir == 'False' %}
+
+{% for directory in dir_list %}                        				
+
+       <div class="col-lg-3" onmouseout="HideDir({{directory.id }})">
+{% load staticfiles %}
+{% static "" as baseURL %} 
+<div id="on_off"  onmouseover="ShowDir({{ directory.id}})">
+<div style="text-align:center">
+          <img class="img-circle" src="{{ baseURL }}/main/images/folder.png" alt="Generic placeholder image" width="140" height="140">
+
+
+<div class="btn-group" id="dir_{{ directory.id }}" style="display:none;">
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'change_dir' directory.hash %}"style="color:#0000cc"><span class="glyphicon glyphicon-eye-open" style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'share_assets_wrapper' directory.hash %}?type=d" style="color:#006600"><span class="glyphicon glyphicon-share-alt"style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" ><a href="{% url 'remove_dir' directory.hash %}" style="color:#cc0000"><span class="glyphicon glyphicon-remove-sign"style="text-align:center"></span></a></li>
+</div>
+<h2>{{ directory.dir_name }}</h2>
+ </div>
+              
+ </div>
+        </div><!-- /.col-lg-4 -->
+{% endfor %}
+
+{% for file in file_list %}
+       <div class="col-lg-3" onmouseout="HideMenu({{ file.id }})">
+{% load staticfiles %}
+{% static "" as baseURL %}
+<div id="on_off"  onmouseover="ShowMenu({{ file.id }})">
+<div style="text-align:center">
+{% if file.file_id.file_type|slice:':3' == 'ima' %}{% load static %}
+	<img class="img-circle" src="{{ baseURL }}/main/images/image.png" style="background-color:white" alt="Generic placeholder image" width="140" height="140">
+	{% elif file.file_id.file_type|slice:':3' == 'aud' %}{% load static %}
+         <img class="img-circle" src="{{ baseURL }}/main/images/cd.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">
+	{% elif file.file_id.file_type == 'application/pdf' %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/adobe.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">{% elif file.file_id.file_type|slice:':3' == 'tex' %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/icon.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140"> 
+{% else %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/icon.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">{% endif %} </a> 
+          
+
+
+
+
+
+<div class="btn-group" id="menu_{{ file.id }}" style="display:none;">
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'open_file' file.download_hash %}"style="color:#0000cc"><span class="glyphicon glyphicon-eye-open" style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'download_file' file.download_hash %}"style="color:#404040"><span class="glyphicon glyphicon-download"style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'share_assets_wrapper' file.download_hash %}?type=f" style="color:#006600"><span class="glyphicon glyphicon-share-alt"style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" ><a href="{% url 'remove_file' file.download_hash %}" style="color:#cc0000"><span class="glyphicon glyphicon-remove-sign"style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" data-toggle="modal" data-target="#myModal_{{ file.id }}"><span class="glyphicon glyphicon-info-sign"style="text-align:center"></span></li>
+</div>
+<h2>{{ file.file_id.name }}</h2>
+<div id="myModal_{{ file.id }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Properties</h4>
+      </div>
+      <div class="modal-body">
+        <p>Name: {{ file.file_id.name }}</p>
+        <p>Type: {{ file.file_id.file_type }}</p>
+        <p>Size: {{ file.file_id.size }} bytes</p>
+        <p>Upload Time: {{ file.file_id.upload_t }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+ </div>
+              
+ </div>
+        </div><!-- /.col-lg-4 -->
+
+    
+ 
+    
+	
+					
+					
+				
+			
+{% endfor %}
+
+{% if dir_now.parent_id %}
+{% else %}
+
+{% for dir_share in dir_shared_list %}                        				
+
+       <div class="col-lg-3" onmouseout="HideDir({{dir_share.share_id.id }})">
+{% load staticfiles %}
+{% static "" as baseURL %} 
+<div id="on_off"  onmouseover="ShowDir({{ dir_share.share_id.id}})">
+<div style="text-align:center">
+          <img class="img-circle" src="{{ baseURL }}/main/images/shared.png" alt="Generic placeholder image" width="140" height="140">
+
+
+<div class="btn-group" id="dir_{{ dir_share.share_id.id }}" style="display:none;">
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'see_share_dir' in_dir_hash=dir_share.share_id.hash is_share=True %}"style="color:#0000cc"><span class="glyphicon glyphicon-eye-open" style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" ><a href="{% url 'unshare' dir_share.share_id.hash %}" style="color:#cc0000"><span class="glyphicon glyphicon-remove-sign"style="text-align:center"></span></a></li>
+</div>
+<h2>{{ dir_share.share_id.dir_name }}</h2>
+ </div>
+              
+ </div>
+        </div><!-- /.col-lg-4 -->
+{% endfor %}
+
+
+{% for share in shared_list %}
+       <div class="col-lg-3" onmouseout="HideShare({{ share.share_id.id }})">
+{% load staticfiles %}
+{% static "" as baseURL %}
+<div id="on_off"  onmouseover="ShowShare({{ share.share_id.id }})">
+<div style="text-align:center">
+{% if share.share_id.file_id.file_type|slice:':3' == 'ima' %}{% load static %}
+	<img class="img-circle" src="{{ baseURL }}/main/images/image.png" style="background-color:white" alt="Generic placeholder image" width="140" height="140">
+	{% elif share.share_id.file_id.file_type|slice:':3' == 'aud' %}{% load static %}
+         <img class="img-circle" src="{{ baseURL }}/main/images/cd.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">
+	{% elif share.share_id.file_id.file_type == 'application/pdf' %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/adobe.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">{% elif file.file_id.file_type|slice:':3' == 'tex' %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/icon.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140"> 
+{% else %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/icon.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">{% endif %} </a> 
+          
+
+
+
+
+
+<div class="btn-group" id="share_{{ share.share_id.id }}" style="display:none;">
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'open_file' share.share_id.download_hash %}"style="color:#0000cc"><span class="glyphicon glyphicon-eye-open" style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" ><a href="{% url 'unshare' share.share_id.download_hash %}?type=f" style="color:#cc0000"><span class="glyphicon glyphicon-remove-sign"style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" data-toggle="modal" data-target="#myModal_share_{{ share.share_id.id }}"><span class="glyphicon glyphicon-info-sign"style="text-align:center"></span></li>
+</div>
+<h2>{{ share.share_id.file_id.name }}</h2>
+<div id="myModal_share_{{ share.share_id.id }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Properties</h4>
+      </div>
+      <div class="modal-body">
+        <p>Name: {{ share.share_id.file_id.name }}</p>
+        <p>Type: {{ share.share_id.file_id.file_type }}</p>
+        <p>Size: {{ share.share_id.file_id.size }} bytes</p>
+        <p>Upload Time: {{ share.share_id.file_id.upload_t }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+ </div>
+              
+ </div>
+        </div><!-- /.col-lg-4 -->
+
+    
+ 
+    
+	
+					
+					
+				
+			
+{% endfor %}
+{% endif %}
+{% else %}
+{% for directory in dir_list %}                        				
+
+       <div class="col-lg-3" onmouseout="HideDir({{directory.id }})">
+{% load staticfiles %}
+{% static "" as baseURL %} 
+<div id="on_off"  onmouseover="ShowDir({{ directory.id}})">
+<div style="text-align:center">
+          <img class="img-circle" src="{{ baseURL }}/main/images/shared.png" alt="Generic placeholder image" width="140" height="140">
+
+
+<div class="btn-group" id="dir_{{ directory.id }}" style="display:none;">
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'see_share_dir' in_dir_hash=directory.hash is_share=True %}"style="color:#0000cc"><span class="glyphicon glyphicon-eye-open" style="text-align:center"></span></a></li>
+</div>
+<h2>{{ directory.dir_name }}</h2>
+ </div>
+              
+ </div>
+        </div><!-- /.col-lg-4 -->
+{% endfor %}
+
+{% for file in file_list %}
+       <div class="col-lg-3" onmouseout="HideMenu({{ file.id }})">
+{% load staticfiles %}
+{% static "" as baseURL %}
+<div id="on_off"  onmouseover="ShowMenu({{ file.id }})">
+<div style="text-align:center">
+{% if file.file_id.file_type|slice:':3' == 'ima' %}{% load static %}
+	<img class="img-circle" src="{{ baseURL }}/main/images/image.png" style="background-color:white" alt="Generic placeholder image" width="140" height="140">
+	{% elif file.file_id.file_type|slice:':3' == 'aud' %}{% load static %}
+         <img class="img-circle" src="{{ baseURL }}/main/images/cd.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">
+	{% elif file.file_id.file_type == 'application/pdf' %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/adobe.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">{% elif file.file_id.file_type|slice:':3' == 'tex' %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/icon.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140"> 
+{% else %}{% load static %}
+	 <img class="img-circle" src="{{ baseURL }}/main/images/icon.png" style="backround-color:white" alt="Generic placeholder image" width="140" height="140">{% endif %} </a> 
+          
+
+
+
+
+
+<div class="btn-group" id="menu_{{ file.id }}" style="display:none;">
+<li class="btn btn-default btn-xs" style="width:21px" ><a href="{% url 'open_file' file.download_hash %}"style="color:#0000cc"><span class="glyphicon glyphicon-eye-open" style="text-align:center"></span></a></li>
+<li class="btn btn-default btn-xs" style="width:22px" data-toggle="modal" data-target="#myModal_{{ file.id }}"><span class="glyphicon glyphicon-info-sign"style="text-align:center"></span></li>
+</div>
+<h2>{{ file.file_id.name }}</h2>
+<div id="myModal_{{ file.id }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Properties</h4>
+      </div>
+      <div class="modal-body">
+        <p>Name: {{ file.file_id.name }}</p>
+        <p>Type: {{ file.file_id.file_type }}</p>
+        <p>Size: {{ file.file_id.size }} bytes</p>
+        <p>Upload Time: {{ file.file_id.upload_t }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+ </div>
+              
+ </div>
+        </div><!-- /.col-lg-4 -->
+
+    
+ 
+    
+				
+				
+			
+{% endfor %}
+
+{% endif %}
+{% else %}
+   
+
+	
+					
+					
+				
+			
+
+{% endif %}
+{% endif %}
+{% endblock %}

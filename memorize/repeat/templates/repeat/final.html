@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	<title>Repeat - Memorize</title>
+{% endblock %}
+
+{% block content %}
+	
+
+	{% load staticfiles %}				
+ <div id="myCarousel" class="carousel slide" style="background-image: url({% static 'main/images/old.jpg' %})" data-ride="carousel">
+
+					<div class="container" id="sign-in-window">
+
+  
+
+                               				<p  class="alert alert-info"  style="margin-top: 80px;">{% if user.is_authenticated %} Finish! You achieve your limit for this study session. {% else %}  You should not be here. </p>
+		</div>
+
+{% endif %}
+{% endblock %}

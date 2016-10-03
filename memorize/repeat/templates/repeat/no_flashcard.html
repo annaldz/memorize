@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>{{ list_object.name }}</title>{% endblock %}
+
+{% block content %}	
+{% load staticfiles %}				
+ <div id="myCarousel" class="carousel slide" style="background-image: url({% static 'main/images/old.jpg' %})" data-ride="carousel">
+<div class="container">
+				
+
+                               				<h1  class="form-signin-headin"  style="margin-top: 110px; color:#e6e6e6; font-weight:bold; padding-bottom:10px;text-align:center"> {{ list_object.name }}. <a href="{% url 'add_flashcard' pk=list_object.pk %}"class="btn btn-default btn-xs"style="color:#006600"><span class="glyphicon glyphicon-plus-sign"style="text-align:center"></span></a> </h1>
+        
+</div>    
+</div>
+{% endblock %}

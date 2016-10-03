@@ -1,0 +1,83 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>{{ list_object.name }} - Memorize</title>{% endblock %}
+
+{% block content %}	
+ 
+{% load staticfiles %}				
+ <div id="myCarousel" class="carousel slide" style="background-color: #ffffff" data-ride="carousel">
+<div class="container">				
+<div class="row">
+ <div class="col-lg-4">
+ {% load staticfiles %}
+{% static "" as baseURL %}
+
+{% with flashcard.question|length as fq %}
+
+
+{% if fq < 10 %}
+<div style="margin-top:100px;background-image: url({% static 'main/images/notatka3.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><h1 style="padding-top:95px; padding-right:10px; padding-left:80px;">{{ flashcard.question }}</h1></div>
+{% elif fq < 20 %}
+         <div style="margin-top:100px;background-image: url({% static 'main/images/notatka.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><h1 style="padding-top:90px; padding-right:10px; padding-left:10px;">{{ flashcard.question }}</h1></div>
+{% elif fq < 35 %}
+  <div style="margin-top:100px;background-image: url({% static 'main/images/notatka2.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><h2 style="padding-top:90px; padding-right:10px; padding-left:10px;">{{ flashcard.question }}</h2></div>
+{% else %}
+<div style="margin-top:100px;background-image: url({% static 'main/images/notatka.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><p style="padding-top:50px; padding-right:10px; padding-left:10px;"> {{ flashcard.question }}</p></div>
+ {% endif %}     
+</div><div class="col-lg-4">
+
+   {% endwith %}             
+
+{% with list_object.name|length as nl %}
+{% if nl < 11 %}       
+<h1 class="form-signin-headin"  style="margin-top: 120px; color:#404040; font-weight:bold; padding-bottom:5px; padding-left:20px;font-family: 'Pacifico', cursive; font-size:500%; text-align:center">{{ list_object.name }}</h1>
+{% else %}
+<h1 class="form-signin-headin"  style="margin-top: 120px; color:#404040; font-weight:bold; padding-bottom:5px; padding-left:20px;font-family: 'Pacifico', cursive; font-size:300%; text-align:center">{{ list_object.name }}{{ flashcard.answer|length }}</h1>
+{% endif %}
+{% endwith %}
+    <h3 style="font-family: 'Pacifico', cursive;"></h3>
+ <div id="div1" onclick="RepeatIt()" style="text-align:center"><button class="btn btn-default btn-lg">Check</button></div>
+        
+
+        
+        <div id="div2" style="display:none;">
+        
+    
+        <p style="text-align:center"><a href="{% url 'update_flashcard' list_pk=list_object.pk answer_value=3 flashcard_pk=flashcard.id %}" class="btn btn-success" title="revise">Simple </a>	<a href="{% url 'update_flashcard' list_pk=list_object.pk answer_value=1 flashcard_pk=flashcard.id %}" class="btn btn-warning" title="revise">Hard </a>	<a href="{% url 'update_flashcard' list_pk=list_object.pk answer_value=2 flashcard_pk=flashcard.id %}" class="btn btn-danger" title="revise">Wrong </a></p> 
+        </div>
+
+       
+						
+							
+
+							<!--<div class="form-field">
+									<label for="password-repeat-input">Keep me signed in:</label>
+									<input type="checkbox" name="permanent" id="permanent-signin-input">
+							</div>-->
+ <br></br>
+      
+</div>
+<div class="col-lg-4" id = "answer" style = "display:none;">
+{% with flashcard.answer|length as fa %}
+
+
+{% if fa < 10 %}
+<div style="margin-top:100px;background-image: url({% static 'main/images/notatka3.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><h1 style="padding-top:95px; padding-right:10px; padding-left:80px;">{{ flashcard.answer }}</h1></div>
+{% elif fa < 20 %}
+         <div style="margin-top:100px;background-image: url({% static 'main/images/notatka.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><h1 style="padding-top:90px; padding-right:10px; padding-left:10px;">{{ flashcard.answer }}</h1></div>
+{% elif fa < 35 %}
+  <div style="margin-top:100px;background-image: url({% static 'main/images/notatka2.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><h2 style="padding-top:90px; padding-right:10px; padding-left:10px;">{{ flashcard.answer }}</h2></div>
+{% elif fa < 200 %}
+<div style="margin-top:100px;background-image: url({% static 'main/images/notatka.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><p style="padding-top:50px; padding-right:10px; padding-left:10px;"> {{ flashcard.answer}}</p></div>
+{% else %}
+<div style="margin-top:100px;background-image: url({% static 'main/images/notatka.png' %}); width:280px;height:244px;font-family: 'Pacifico', cursive;"><p style="padding-top:50px; padding-right:10px; padding-left:10px;font-size:80%;"> {{ flashcard.answer }}</p></div>
+{% endif %}     
+</div><div class="col-lg-4">
+
+   {% endwith %}             
+
+
+
+</div>
+    </div>
+{% endblock %}

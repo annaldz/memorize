@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+
+{% block title %}		<title>{% if user.registered or user.is_authenticated %}Add photo{% else %}Access Denied{% endif %} </title>{% endblock %}
+
+{% block content %}
+				{% if user.registered or user.is_authenticated %}
+				{% load staticfiles %}				
+ <div id="myCarousel" class="carousel slide" style="background-image: url({% static 'main/images/old.jpg' %})" data-ride="carousel">
+
+					<div class="container" id="sign-in-window">
+
+      <div class="row">
+ <div class="col-lg-4">
+</div><div class="col-lg-4">
+
+                               				<h2  class="form-signin-headin"  style="margin-top: 80px; color:#e6e6e6; font-weight:bold; padding-bottom:15px"> {% if user.is_authenticated %} Add photo</h2>
+	
+						
+						<form class="form-signin" name="upload-file-form" id="upload-file-form" method="post" action="/files/send_file/True/" enctype="multipart/form-data">{% for message in messages %}
+						<div class="alert alert-danger">
+							<p>{{ message }}</p>
+						</div> {% endfor %}
+							{% csrf_token %}
+							{% for field in sendfile_form %}
+							<div class="form-field upload-form-field">
+								{{ field.label_tag }}
+								{{ field }}
+								{% if field.help_text %}
+								<div class="message white window">
+									<p>{{ field.help_text|safe }}</p>
+								</div>
+								{% endif %}
+								{% if field.errors %}
+								<div class="message red window">
+									{% for error in field.errors %}
+									<p>{{ error }}</p>
+									{% endfor %}
+								</div>
+								{% endif %}
+							</div>
+							{% endfor %}
+							<div class="form-field" style="text-align:center; padding-top:15px">
+									<input class="btn btn-default btn-md" type="submit" value="Upload!" class="button button-green">
+							</div>
+						</form>
+					</div>
+					<!--<div class="space-1"></div>-->
+					
+				{% else %}
+				<div class="grid-6">
+					<div class="space-1"></div>
+					<div class="cell-4 message red">
+						<h1>Error 403</h1>
+						<p>Access restricted to logged users only.</p>
+						<p><a href="/">Return to the homepage.</a></p>
+					</div>
+					<div class="space-1"></div>
+				</div>
+				{% endif %}
+{% endif %}
+{% endblock %}

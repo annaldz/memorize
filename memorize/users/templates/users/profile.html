@@ -1,0 +1,58 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	<title>My profile - Memorize</title>
+{% endblock %}
+
+{% block content %}
+
+					<div class="container" id="sign-in-window">
+
+      <div class="row">
+{% if user.is_authenticated %}
+ <div class="col-lg-6">
+		<h1 class="form-signin-headin"  style="margin-top: 110px; color:#404040; font-weight:bold; padding-bottom:5px"></h1>
+{% load staticfiles %}
+{% static "" as baseURL %}
+{% if default_pic = False %}
+          <img class="img-thumbnail" src="{{ baseURL }}/files/storage/{{ file_storage.file_hash }}" alt="Generic placeholder image">
+<h2  class="form-signin-headin"  style="padding-top: 3px; color:#404040; font-weight:bold;"></h2>
+{% else %}
+<img class="img-thumbnail" src="{{ baseURL }}/main/images/user.png" alt="Generic placeholder image">
+<h2  class="form-signin-headin"  style="padding-top: 3px; color:#404040; font-weight:bold;"></h2>
+{% endif %}
+        <p class="lead"></p>
+    </div>
+
+<div class="col-lg-6">
+
+				<h1 class="form-signin-headin"  style="margin-top: 120px; color:#404040; font-weight:bold; padding-bottom:5px; padding-left:20px">{{ user.username }}'s Profile</h1>
+<table class="table" >
+				<thead>
+                                <tr>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>E-mail</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.last_name }}</td>
+                                <td> {{ user.email }}</td>
+                                </tr>
+                                </tbody>
+                                </table>
+				
+        <li class="btn btn-default btn-md"><a href="{% url 'send_pic' picture=True %}" style="color:#595959">Change Picture</a></li>
+        <li class="btn btn-default btn-md"><a href="{% url 'edit-names' %}" style="color:#595959">Change Personal Data</a></li>
+        <li class="btn btn-default btn-md"><a href="{% url 'send_file' %}" style="color:#595959">Add Materials</a></li>
+        
+       	
+       	
+</div>
+</div>
+</div>
+				
+				{% endif %}
+{% endblock %}
